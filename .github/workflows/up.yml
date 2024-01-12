@@ -40,6 +40,6 @@ jobs:
         git config --local user.name "GitHub Action"
         git add .
         git commit -m "Update subfolder"
-        git push
+        git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.YOUR_PERSONAL_ACCESS_TOKEN }}
