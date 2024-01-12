@@ -1,0 +1,38 @@
+name: Clone and Update Subfolder
+
+on:
+  schedule:
+    - cron: '0 */5 * * *'  # 每隔5小时执行一次
+
+jobs:
+  clone_and_update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Clone and sparse-checkout subfolder from another repository
+      run: |
+        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse subfolder
+        cd subfolder
+        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-mosdns luci-app-poweroff luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash r8125 nps upx ucl mosdns luci-lib-fs wrtbwmon v2dat 
+        cp -r folder1 $GITHUB_WORKSPACE/
+        cp -r folder1 $GITHUB_WORKSPACE/
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Remove old subfolder
+      run: |
+        rm -rf old_subfolder
+      working-directory: $GITHUB_WORKSPACE
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Update subfolder"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
