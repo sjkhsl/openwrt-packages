@@ -45,4 +45,4 @@ jobs:
         git commit -m "Update subfolder"
         git push origin main
       env:
-        GITHUB_TOKEN: ${{ secrets.YOUR_PERSONAL_ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
