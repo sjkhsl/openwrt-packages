@@ -44,6 +44,15 @@ jobs:
         git config --global user.email "sjkhsl@qq.com"
         git config --global user.name "sjkhsl"
 
+    # Add steps to remove subfolder and subfolder2
+    - name: Remove subfolder
+      run: |
+        rm -rf "${{ github.workspace }}/subfolder"
+
+    - name: Remove subfolder2
+      run: |
+        rm -rf "${{ github.workspace }}/subfolder2"
+
     - name: Commit and push changes
       run: |
         git add .
