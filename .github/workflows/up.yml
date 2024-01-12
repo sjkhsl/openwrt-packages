@@ -18,7 +18,7 @@ jobs:
     - name: Set up Git credentials
       uses: de-vri-es/setup-git-credentials@v2
       with:
-        credentials: https://sjkhsl:${{ secrets.YOUR_PERSONAL_ACCESS_TOKEN }}@github.com/
+        credentials: https://sjkhsl:${{ secrets.TOKEN_SJKHSL }}@github.com/
 
     - name: Clone and sparse-checkout subfolder from Repo 1
       run: |
