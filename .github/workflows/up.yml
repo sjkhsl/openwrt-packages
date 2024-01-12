@@ -39,8 +39,8 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git config --local user.email "${ACTOR_EMAIL}"
-        git config --local user.name "${ACTOR}"
+        git config --global user.email "sjkhsl@qq.com"
+        git config --global user.name "sjkhsl"
         git add .
         git commit -m "Update subfolder"
         git push origin main
