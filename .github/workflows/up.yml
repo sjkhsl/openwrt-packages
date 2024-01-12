@@ -1,10 +1,9 @@
-name: On Push Workflow
+name: On Push and Schedule Workflow
 
 on:
   push:
     branches:
-      - main  # 或者你的默认分支的名称
-on:
+      - main
   schedule:
     - cron: '0 */5 * * *'  # 每隔5小时执行一次
 
