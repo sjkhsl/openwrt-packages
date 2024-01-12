@@ -16,7 +16,8 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up Git with HTTPS
-      run: git config --global credential.helper store
+      run: |
+        git config --global credential.helper store
 
     - name: Clone and sparse-checkout subfolder from Repo 1
       run: |
@@ -34,7 +35,7 @@ jobs:
 
     - name: Remove old subfolder
       run: |
-       rm -rf old_subfolder
+        rm -rf old_subfolder
       working-directory: ${{ github.workspace }}
 
     - name: Commit and push changes
@@ -45,4 +46,4 @@ jobs:
         git commit -m "Update subfolder"
         git push origin main
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PAT: ${{ secrets.YOUR_PERSONAL_ACCESS_TOKEN }}
