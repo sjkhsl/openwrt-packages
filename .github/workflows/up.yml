@@ -15,6 +15,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Set up Git with HTTPS
+      run: git config --global credential.helper store
+
     - name: Clone and sparse-checkout subfolder from Repo 1
       run: |
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse subfolder
