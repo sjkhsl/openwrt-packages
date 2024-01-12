@@ -15,9 +15,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Git with HTTPS
-      run: |
-        git config --global credential.helper store
+    - name: Set up Git credentials
+      uses: de-vri-es/setup-git-credentials@v2
+      with:
+        credentials: https://sjkhsl:${{ secrets.YOUR_PERSONAL_ACCESS_TOKEN }}@github.com/
 
     - name: Clone and sparse-checkout subfolder from Repo 1
       run: |
@@ -38,12 +39,13 @@ jobs:
         rm -rf old_subfolder
       working-directory: ${{ github.workspace }}
 
+    - name: Set git identity
+      run : |
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+
     - name: Commit and push changes
       run: |
-        git config --global user.email "sjkhsl@qq.com"
-        git config --global user.name "sjkhsl"
         git add .
         git commit -m "Update subfolder"
         git push origin main
-      env:
-        PAT: ${{ secrets.YOUR_PERSONAL_ACCESS_TOKEN }}
