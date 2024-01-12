@@ -12,13 +12,41 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Clone and sparse-checkout subfolder from another repository
+    - name: Clone and sparse-checkout subfolder from Repo 1
       run: |
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse subfolder
         cd subfolder
         git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-mosdns luci-app-poweroff luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash r8125 nps upx ucl mosdns luci-lib-fs wrtbwmon v2dat 
-        cp -r folder1 $GITHUB_WORKSPACE/
-        cp -r folder1 $GITHUB_WORKSPACE/
+        cp -r luci-app-autoreboot $GITHUB_WORKSPACE/
+        cp -r luci-app-ramfree $GITHUB_WORKSPACE/
+        cp -r luci-app-diskman $GITHUB_WORKSPACE/
+        cp -r luci-app-nginx-manager $GITHUB_WORKSPACE/
+        cp -r luci-app-filetransfer $GITHUB_WORKSPACE/
+        cp -r luci-app-netdata $GITHUB_WORKSPACE/
+        cp -r luci-app-mosdns $GITHUB_WORKSPACE/
+        cp -r luci-app-poweroff $GITHUB_WORKSPACE/
+        cp -r luci-app-syncdial $GITHUB_WORKSPACE/
+        cp -r luci-app-nps $GITHUB_WORKSPACE/
+        cp -r luci-theme-edge $GITHUB_WORKSPACE/
+        cp -r luci-app-wrtbwmon $GITHUB_WORKSPACE/
+        cp -r luci-app-openclash $GITHUB_WORKSPACE/
+        cp -r r8125 $GITHUB_WORKSPACE/
+        cp -r nps $GITHUB_WORKSPACE/
+        cp -r upx $GITHUB_WORKSPACE/
+        cp -r ucl $GITHUB_WORKSPACE/
+        cp -r mosdns $GITHUB_WORKSPACE/
+        cp -r luci-lib-fs $GITHUB_WORKSPACE/
+        cp -r wrtbwmon $GITHUB_WORKSPACE/
+        cp -r v2dat $GITHUB_WORKSPACE/
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Clone and sparse-checkout subfolder from Repo 2
+      run: |
+        git clone --depth 1 https://github.com/Lienol/openwrt.git --branch 23.05 --single-branch --sparse subfolder2
+        cd subfolder2
+        git sparse-checkout set package/default-settings
+        cp -r package/default-settings $GITHUB_WORKSPACE/
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
