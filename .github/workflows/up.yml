@@ -43,6 +43,7 @@ jobs:
         cp -r v2dat $GITHUB_WORKSPACE/
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      working-directory: $GITHUB_WORKSPACE/
 
     - name: Clone and sparse-checkout subfolder from Repo 2
       run: |
@@ -52,6 +53,7 @@ jobs:
         cp -r package/default-settings $GITHUB_WORKSPACE/
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      working-directory: $GITHUB_WORKSPACE/
 
     - name: Remove old subfolder
       run: |
