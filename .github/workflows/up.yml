@@ -53,6 +53,8 @@ jobs:
       run: |
         rm -rf "${{ github.workspace }}/subfolder2"
 
+    - name: 切换到工作目录
+      run: cd $GITHUB_WORKSPACE
     - name: 检查Git存储库
       run: git rev-parse --is-inside-work-tree
     - name: 强制推送更改
