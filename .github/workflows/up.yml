@@ -41,14 +41,14 @@ jobs:
 
     - name: Compare changes and force update
       run: |
-        changes=$(git diff HEAD^..HEAD)
+        changes=$(git diff ${{ github.sha }}^..${{ github.sha }})
         if [ -n "$changes" ]; then
-          for pkg in $(git diff-tree --no-commit-id --name-only HEAD); do
+          for pkg in $(git diff-tree --no-commit-id --name-only ${{ github.sha }}); do
             if [ "$(grep "PKG_RELEASE" $pkg/Makefile)" ]; then
-              sed -i "s/PKG_RELEASE:=.*/PKG_RELEASE:=$(git rev-list --count HEAD $pkg)/" $pkg/Makefile || true
+              sed -i "s/PKG_RELEASE:=.*/PKG_RELEASE:=$(git rev-list --count ${{ github.sha }} $pkg)/" $pkg/Makefile || true
             fi
           done
-          git reset --soft HEAD^
+          git reset --soft ${{ github.sha }}^
           git add .
           Emoji=("🎉" "🤞" "✨" "🎁" "🎈" "🎄" "🎨" "💋" "🍓" "🍕" "🍉" "💐" "🌴" "🚀" "🛸" "🗽" "⛅" "🌈" "🔥" "⛄" "🐶" "🏅" "🦄" "🐤")
           git commit -m "${Emoji[$[$RANDOM % ${#Emoji[@]}]]} Sync $(date +%Y-%m-%d" "%H:%M:%S)"
