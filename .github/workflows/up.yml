@@ -55,8 +55,7 @@ jobs:
 
     - name: Force-push changes
       run: |
-        find . -maxdepth 1 -mindepth 1 -not -name '.github' -exec rm -rf {} +  # 删除 .github 以外的文件夹
-        rm -rf somefile.txt
-        git add .
-        git commit -m "Update subfolder"
-        git push --force origin main
+         find . -maxdepth 1 -mindepth 1 -not -name '.github' -exec rm -rf {} +  # 删除 .github 以外的文件夹和文件
+         git add .
+         git commit -m "更新子文件夹"
+         git push --force origin main
