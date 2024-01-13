@@ -32,12 +32,22 @@ jobs:
         git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-mosdns luci-app-poweroff luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash r8125 nps upx ucl mosdns luci-lib-fs wrtbwmon v2dat 
         cp -r luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-mosdns luci-app-poweroff luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash r8125 nps upx ucl mosdns luci-lib-fs wrtbwmon v2dat "${{ github.workspace }}/"
 
+    - name: Remove nested Git repository (if exists)
+      run: |
+        cd "${{ github.workspace }}/subfolder"
+        git rm --cached subfolder
+
     - name: Clone and sparse-checkout subfolder from Repo 2
       run: |
         git clone --depth 1 https://github.com/Lienol/openwrt.git --branch 23.05 --single-branch --sparse subfolder2
         cd subfolder2
         git sparse-checkout set package/default-settings
         cp -r package/default-settings "${{ github.workspace }}/"
+
+    - name: Remove nested Git repository (if exists)
+      run: |
+        cd "${{ github.workspace }}/subfolder2"
+        git rm --cached subfolder2
 
     - name: Check for changes
       run: |
