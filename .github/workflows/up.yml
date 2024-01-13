@@ -57,6 +57,7 @@ jobs:
       run: |
         git checkout main
         git pull origin main
+        echo "Update content" >> somefile.txt  # 添加虚拟的更改
         git add .
         git commit -m "Update subfolder"
         git push --force origin main
