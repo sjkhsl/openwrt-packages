@@ -53,12 +53,12 @@ jobs:
       run: |
         rm -rf "${{ github.workspace }}/subfolder2"
 
-    - name: 切换到工作目录并配置Git
+    - name: 切换到工作目录
+      run: cd $GITHUB_WORKSPACE
+    - name: 配置Git用户信息
       run: |
-        cd $GITHUB_WORKSPACE
         git config --global user.email "actions@github.com"
         git config --global user.name "GitHub Actions"
-
     - name: 强制推送更改
       run: |
         find . -maxdepth 1 -mindepth 1 -not -name '.github' -exec rm -rf {} +  # 删除 .github 以外的文件夹和文件
