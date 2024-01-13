@@ -53,8 +53,10 @@ jobs:
       run: |
         rm -rf "${{ github.workspace }}/subfolder2"
 
-    - name: Commit and push changes
+    - name: Force-push changes
       run: |
+        git checkout main
+        git pull origin main
         git add .
         git commit -m "Update subfolder"
-        git push origin main
+        git push --force origin main
