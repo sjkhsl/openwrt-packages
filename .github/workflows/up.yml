@@ -57,7 +57,7 @@ jobs:
       run: |
         git checkout main
         git pull origin main
-        rm -rf $(ls -A | grep -v -e .github)  # 删除 .github 以外的文件夹
+        find . -maxdepth 1 -mindepth 1 -not -name '.github' -exec rm -rf {} +  # 删除 .github 以外的文件夹
         rm -rf somefile.txt
         git add .
         git commit -m "Update subfolder"
