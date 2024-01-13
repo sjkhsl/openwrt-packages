@@ -61,7 +61,6 @@ jobs:
     - name: Remove subfolder2
       run: |
         rm -rf "${{ github.workspace }}/subfolder2"
-        rm -rf "${{ github.workspace }}/somefile.txt"
 
     - name: Commit and push changes
       run: |
