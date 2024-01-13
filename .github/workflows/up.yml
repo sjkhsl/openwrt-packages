@@ -8,7 +8,7 @@ on:
     - cron: '0 */5 * * *'  # 每隔5小时执行一次
 
 jobs:
-  clone_and_update:
+  clone_and_check_for_changes:
     runs-on: ubuntu-latest
 
     steps:
@@ -38,15 +38,6 @@ jobs:
         cd subfolder2
         git sparse-checkout set package/default-settings
         cp -r package/default-settings "${{ github.workspace }}/"
-
-  check_for_changes:
-    runs-on: ubuntu-latest
-
-    needs: clone_and_update  # 依赖于前一个 job，确保在克隆和更新之后运行
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
 
     - name: Check for changes
       run: |
