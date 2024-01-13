@@ -39,20 +39,21 @@ jobs:
         git sparse-checkout set package/default-settings
         cp -r package/default-settings "${{ github.workspace }}/"
 
-    - name: Compare changes and force update
+  check_for_changes:
+    runs-on: ubuntu-latest
+
+    needs: clone_and_update  # 依赖于前一个 job，确保在克隆和更新之后运行
+
+    steps:
+    - name: Check for changes
       run: |
-        changes=$(git diff ${{ github.sha }}^..${{ github.sha }})
+        cd "${{ github.workspace }}"
+        changes=$(git status -s)
         if [ -n "$changes" ]; then
-          for pkg in $(git diff-tree --no-commit-id --name-only ${{ github.sha }}); do
-            if [ "$(grep "PKG_RELEASE" $pkg/Makefile)" ]; then
-              sed -i "s/PKG_RELEASE:=.*/PKG_RELEASE:=$(git rev-list --count ${{ github.sha }} $pkg)/" $pkg/Makefile || true
-            fi
-          done
-          git reset --soft ${{ github.sha }}^
+          echo "Changes detected. Pushing updates..."
           git add .
-          Emoji=("🎉" "🤞" "✨" "🎁" "🎈" "🎄" "🎨" "💋" "🍓" "🍕" "🍉" "💐" "🌴" "🚀" "🛸" "🗽" "⛅" "🌈" "🔥" "⛄" "🐶" "🏅" "🦄" "🐤")
-          git commit -m "${Emoji[$[$RANDOM % ${#Emoji[@]}]]} Sync $(date +%Y-%m-%d" "%H:%M:%S)"
-          git push -f
+          git commit -m "Changes detected: $changes at $(date +"%Y-%m-%d %H:%M:%S")"
+          git push origin main
         else
-          echo "No changes, skipping push."
+          echo "No changes detected. Skipping push."
         fi
