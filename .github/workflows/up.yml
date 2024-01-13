@@ -41,9 +41,9 @@ jobs:
 
     - name: Compare changes and force update
       run: |
-        changes=$(git status -s)
+        changes=$(git diff HEAD~1)
         if [ -n "$changes" ]; then
-          for pkg in $(git diff-tree --no-commit-id --name-only HEAD~1); do
+          for pkg in $(git diff HEAD~1 --name-only); do
             if [ "$(grep "PKG_RELEASE" $pkg/Makefile)" ]; then
               sed -i "s/PKG_RELEASE:=.*/PKG_RELEASE:=$(git rev-list --count main $pkg)/" $pkg/Makefile || true
             fi
