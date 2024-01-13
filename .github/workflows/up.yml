@@ -55,7 +55,6 @@ jobs:
 
     - name: Force-push changes
       run: |
-        git pull origin main
         find . -maxdepth 1 -mindepth 1 -not -name '.github' -exec rm -rf {} +  # 删除 .github 以外的文件夹
         rm -rf somefile.txt
         git add .
