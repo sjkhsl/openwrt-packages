@@ -59,6 +59,7 @@ jobs:
       run: git rev-parse --is-inside-work-tree
     - name: 强制推送更改
       run: |
+        cd $GITHUB_WORKSPACE  # 再次确保在正确的工作目录
         find . -maxdepth 1 -mindepth 1 -not -name '.github' -exec rm -rf {} +  # 删除 .github 以外的文件夹和文件
         git add .
         git commit -m "更新子文件夹"
