@@ -45,6 +45,9 @@ jobs:
     needs: clone_and_update  # 依赖于前一个 job，确保在克隆和更新之后运行
 
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
     - name: Check for changes
       run: |
         cd "${{ github.workspace }}"
