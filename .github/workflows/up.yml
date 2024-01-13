@@ -41,7 +41,7 @@ jobs:
 
     - name: Compare changes and force update
       run: |
-        changes=$(git diff HEAD^)
+        changes=$(git diff HEAD^..HEAD)
         if [ -n "$changes" ]; then
           for pkg in $(git diff-tree --no-commit-id --name-only HEAD); do
             if [ "$(grep "PKG_RELEASE" $pkg/Makefile)" ]; then
@@ -56,4 +56,3 @@ jobs:
         else
           echo "No changes, skipping push."
         fi
-
