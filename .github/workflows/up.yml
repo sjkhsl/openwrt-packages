@@ -39,9 +39,15 @@ jobs:
         git clone --depth 1 https://github.com/Lienol/openwrt.git --branch 23.05 --single-branch --sparse subfolder2
         cd subfolder2
         git sparse-checkout set package/default-settings
-        rsync -av --exclude='.git' package/default-settings "${{ github.workspace }}/package/"
+        rsync -av --exclude='.git' "package/default-settings/" "${{ github.workspace }}/default-settings/"
         cd ..
         rm -rf subfolder2
+
+    # 可能的其它步骤...
+
+    - name: Remove package/default-settings (如果之前步骤中有此操作)
+      run: |
+        rm -f "${{ github.workspace }}/package/default-settings"
 
     - name: Check for changes
       run: |
