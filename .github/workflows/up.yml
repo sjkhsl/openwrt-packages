@@ -36,16 +36,18 @@ jobs:
 
     - name: Clone and sparse-checkout subfolder from Repo 2
       run: |
-        git clone --depth 1 https://github.com/Lienol/openwrt.git --branch 23.05 --single-branch --sparse subfolder2
-        cd subfolder2
-        git sparse-checkout set package/default-settings
-        rsync -av --exclude='.git' "package/default-settings/" "${{ github.workspace }}/default-settings/"
-        cd ..
-        rm -rf subfolder2
+        git clone --depth 1 https://github.com/Lienol/openwrt.git --branch main --single-branch temp
+        mkdir -p temp/default-settings
+        mv temp/package/default-settings/* temp/default-settings/
+        rm -rf temp/package
 
-    - name: Remove existing package/default-settings
+    - name: Sync default-settings folder
       run: |
-        rm -rf "${{ github.workspace }}/package"
+        rsync -av --delete temp/default-settings/ ${{ github.workspace }}/default-settings/
+
+    - name: Remove temporary folder
+      run: |
+        rm -rf temp
 
     - name: Check for changes
       run: |
