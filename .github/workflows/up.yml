@@ -43,11 +43,6 @@ jobs:
         cd ..
         rm -rf subfolder2
 
-    - name: Remove .gitignore and LICENSE
-      run: |
-        rm -f "${{ github.workspace }}/.gitignore"
-        rm -f "${{ github.workspace }}/LICENSE"
-
     - name: Check for changes
       run: |
         cd "${{ github.workspace }}"
