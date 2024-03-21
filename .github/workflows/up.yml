@@ -43,11 +43,9 @@ jobs:
         cd ..
         rm -rf subfolder2
 
-    # 可能的其它步骤...
-
-    - name: Remove package/default-settings (如果之前步骤中有此操作)
+    - name: Remove existing package/default-settings
       run: |
-        rm -f "${{ github.workspace }}/package/default-settings"
+        rm -rf "${{ github.workspace }}/package"
 
     - name: Check for changes
       run: |
