@@ -45,15 +45,12 @@ jobs:
 
     - name: Check for changes
       run: |
-        set -e
         cd "${{ github.workspace }}"
-        git add .
-        if git diff --quiet; then
+        git add -A
+        if [ -z "$(git diff --staged)" ]; then
           echo "No changes detected. Skipping push."
         else
           echo "Changes detected. Pushing updates..."
-          changes=$(git diff --name-only)
-          git commit -m "Changes detected: ${changes} at $(date +"%Y-%m-%d %H:%M:%S")"
+          git commit -m "Updated submodules on $(date +'%Y-%m-%d %H:%M:%S')"
           git push origin main
         fi
-
