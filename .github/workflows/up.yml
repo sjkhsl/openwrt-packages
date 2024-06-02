@@ -45,6 +45,11 @@ jobs:
       run: |
         rsync -av --delete temp/default-settings/ ${{ github.workspace }}/default-settings/
 
+    - name: Remove extra
+      run: |
+        rm -f "${{ github.workspace }}/luci-app-modns"
+        rm -f "${{ github.workspace }}/modns"    
+
     - name: Remove temporary folder
       run: |
         rm -rf temp
