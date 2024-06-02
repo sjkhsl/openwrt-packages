@@ -29,10 +29,15 @@ jobs:
       run: |
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse subfolder
         cd subfolder
-        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-mosdns luci-app-poweroffdevice luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash r8125 nps upx ucl mosdns luci-lib-fs wrtbwmon v2dat 
+        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash r8125 nps upx ucl luci-lib-fs wrtbwmon v2dat 
         rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf subfolder
+
+    - name: Remove luci-app-mosdns and mosdns
+      run: |
+        rm -rf "${{ github.workspace }}/luci-app-mosdns"
+        rm -rf "${{ github.workspace }}/mosdns"
 
     - name: Clone and sparse-checkout subfolder from Repo 2
       run: |
@@ -44,11 +49,6 @@ jobs:
     - name: Sync default-settings folder
       run: |
         rsync -av --delete temp/default-settings/ ${{ github.workspace }}/default-settings/
-
-    - name: Remove extra
-      run: |
-        rm -f "${{ github.workspace }}/luci-app-modns"
-        rm -f "${{ github.workspace }}/modns"    
 
     - name: Remove temporary folder
       run: |
@@ -62,6 +62,6 @@ jobs:
           echo "No changes detected. Skipping push."
         else
           echo "Changes detected. Pushing updates..."
-          git commit -m "Updated submodules on $(date +'%Y-%m-%d %H:%M:%S')"
+          git commit -m "Updated submodules and removed luci-app-mosdns and mosdns on $(date +'%Y-%m-%d %H:%M:%S')"
           git push origin main
         fi
