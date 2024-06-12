@@ -34,10 +34,6 @@ jobs:
         cd ..
         rm -rf subfolder
 
-    - name: Remove r8125
-      run: |
-        rm -rf "${{ github.workspace }}/r8125"
-
     - name: Clone and sparse-checkout subfolder from Repo 2
       run: |
         git clone --depth 1 https://github.com/Lienol/openwrt.git --branch main --single-branch temp
@@ -70,6 +66,10 @@ jobs:
         git clone --depth 1 https://github.com/pymumu/luci-app-smartdns.git temp_luci_app_smartdns
         rsync -av --exclude='.git' temp_luci_app_smartdns/ "${{ github.workspace }}/luci-app-smartdns/"
         rm -rf temp_luci_app_smartdns
+
+    #- name: Remove r8125
+    #  run: |
+    #    rm -rf "${{ github.workspace }}/r8125"
 
     - name: Check for changes
       run: |
