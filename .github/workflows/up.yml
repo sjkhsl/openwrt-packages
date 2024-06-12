@@ -39,17 +39,17 @@ jobs:
         rm -rf "${{ github.workspace }}/luci-app-mosdns"
         rm -rf "${{ github.workspace }}/mosdns"
 
-    - name: Clone luci-app-smartdns repository
+    - name: Clone luci-app-smartdns
       run: |
-        git clone --depth 1 https://github.com/pymumu/luci-app-smartdns.git temp-luci-app-smartdns
-        rsync -av --delete temp-luci-app-smartdns/ ${{ github.workspace }}/luci-app-smartdns/
-        rm -rf temp-luci-app-smartdns
+        git clone --depth 1 https://github.com/pymumu/luci-app-smartdns.git
+        rsync -av --exclude='.git' luci-app-smartdns/ "${{ github.workspace }}/luci-app-smartdns/"
+        rm -rf luci-app-smartdns
 
-    - name: Clone smartdns repository
+    - name: Clone openwrt-smartdns
       run: |
-        git clone --depth 1 https://github.com/pymumu/openwrt-smartdns.git temp-smartdns
-        rsync -av --delete temp-smartdns/ ${{ github.workspace }}/smartdns/
-        rm -rf temp-smartdns
+        git clone --depth 1 https://github.com/pymumu/openwrt-smartdns.git
+        rsync -av --exclude='.git' openwrt-smartdns/ "${{ github.workspace }}/smartdns/"
+        rm -rf openwrt-smartdns
 
     - name: Clone and sparse-checkout subfolder from Repo 2
       run: |
@@ -74,6 +74,5 @@ jobs:
           echo "No changes detected. Skipping push."
         else
           echo "Changes detected. Pushing updates..."
-          git commit -m "Updated submodules and removed luci-app-mosdns and mosdns, added luci-app-smartdns and smartdns on $(date +'%Y-%m-%d %H:%M:%S')"
+          git commit -m "Updated submodules, added smartdns and luci-app-smartdns, removed luci-app-mosdns and mosdns on $(date +'%Y-%m-%d %H:%M:%S')"
           git push origin main
-        fi
