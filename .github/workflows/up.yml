@@ -29,27 +29,14 @@ jobs:
       run: |
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse subfolder
         cd subfolder
-        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash r8125 nps upx ucl luci-lib-fs wrtbwmon v2dat 
+        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash nps upx ucl luci-lib-fs wrtbwmon v2dat 
         rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf subfolder
 
-    - name: Remove luci-app-mosdns and mosdns
+    - name: Remove r8125
       run: |
-        rm -rf "${{ github.workspace }}/luci-app-mosdns"
-        rm -rf "${{ github.workspace }}/mosdns"
-
-    - name: Clone luci-app-smartdns
-      run: |
-        git clone --depth 1 https://github.com/pymumu/luci-app-smartdns.git
-        rsync -av --exclude='.git' luci-app-smartdns/ "${{ github.workspace }}/luci-app-smartdns/"
-        rm -rf luci-app-smartdns
-
-    - name: Clone openwrt-smartdns
-      run: |
-        git clone --depth 1 https://github.com/pymumu/openwrt-smartdns.git
-        rsync -av --exclude='.git' openwrt-smartdns/ "${{ github.workspace }}/smartdns/"
-        rm -rf openwrt-smartdns
+        rm -rf "${{ github.workspace }}/r8125"
 
     - name: Clone and sparse-checkout subfolder from Repo 2
       run: |
@@ -74,5 +61,6 @@ jobs:
           echo "No changes detected. Skipping push."
         else
           echo "Changes detected. Pushing updates..."
-          git commit -m "Updated submodules, added smartdns and luci-app-smartdns, removed luci-app-mosdns and mosdns on $(date +'%Y-%m-%d %H:%M:%S')"
+          git commit -m "Updated submodules and removed luci-app-mosdns and mosdns on $(date +'%Y-%m-%d %H:%M:%S')"
           git push origin main
+        fi
