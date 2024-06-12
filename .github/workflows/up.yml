@@ -62,10 +62,6 @@ jobs:
       run: |
         rsync -av --delete temp/default-settings/ ${{ github.workspace }}/default-settings/
 
-    - name: Remove Useless directory
-      run: |
-        rm -rf "${{ github.workspace }}/r8125"
-
     - name: Remove temporary folder
       run: |
         rm -rf temp
