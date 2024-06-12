@@ -52,7 +52,7 @@ jobs:
     - name: Clone r8125 repository
       run: |
         git clone --depth 1 https://github.com/sbwml/package_kernel_r8125.git temp_r8125
-        rsync -av --exclude='.git' temp_r8125/ "${{ github.workspace }}/"
+        rsync -av --exclude='.git' temp_r8125/ "${{ github.workspace }}/r8125/"
         rm -rf temp_r8125
 
     - name: Clone openwrt-smartdns repository
@@ -67,9 +67,11 @@ jobs:
         rsync -av --exclude='.git' temp_luci_app_smartdns/ "${{ github.workspace }}/luci-app-smartdns/"
         rm -rf temp_luci_app_smartdns
 
-    #- name: Remove r8125
-    #  run: |
-    #    rm -rf "${{ github.workspace }}/r8125"
+    - name: Remove r8125
+      run: |
+        rm -rf "${{ github.workspace }}/patches"
+        rm -rf "${{ github.workspace }}/src"
+        rm -rf "${{ github.workspace }}/Makefile"
 
     - name: Check for changes
       run: |
