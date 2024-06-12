@@ -53,25 +53,34 @@ jobs:
       run: |
         git clone --depth 1 https://github.com/sbwml/package_kernel_r8125.git temp_r8125
         rsync -av --exclude='.git' temp_r8125/ "${{ github.workspace }}/r8125/"
+        cd temp_r8125
+        latest_commit_message=$(git log -1 --pretty=%B)
+        cd ..
         rm -rf temp_r8125
 
     - name: Clone openwrt-smartdns repository
       run: |
         git clone --depth 1 https://github.com/pymumu/openwrt-smartdns.git temp_smartdns
         rsync -av --exclude='.git' temp_smartdns/ "${{ github.workspace }}/smartdns/"
+        cd temp_smartdns
+        latest_commit_message_smartdns=$(git log -1 --pretty=%B)
+        cd ..
         rm -rf temp_smartdns
 
     - name: Clone luci-app-smartdns repository
       run: |
         git clone --depth 1 https://github.com/pymumu/luci-app-smartdns.git temp_luci_app_smartdns
         rsync -av --exclude='.git' temp_luci_app_smartdns/ "${{ github.workspace }}/luci-app-smartdns/"
+        cd temp_luci_app_smartdns
+        latest_commit_message_luci_app_smartdns=$(git log -1 --pretty=%B)
+        cd ..
         rm -rf temp_luci_app_smartdns
 
-    - name: Remove r8125
-      run: |
-        rm -rf "${{ github.workspace }}/patches"
-        rm -rf "${{ github.workspace }}/src"
-        rm -rf "${{ github.workspace }}/Makefile"
+    #- name: Remove Useless directory
+    #  run: |
+    #    rm -rf "${{ github.workspace }}/1"
+    #    rm -rf "${{ github.workspace }}/2"
+    #    rm -rf "${{ github.workspace }}/3"        
 
     - name: Check for changes
       run: |
@@ -81,6 +90,11 @@ jobs:
           echo "No changes detected. Skipping push."
         else
           echo "Changes detected. Pushing updates..."
-          git commit -m "Updated submodules and removed luci-app-mosdns and mosdns on $(date +'%Y-%m-%d %H:%M:%S')"
+          combined_commit_message="Updated submodules on $(date +'%Y-%m-%d %H:%M:%S')\n\n"
+          combined_commit_message+="Updates from kiddin9/openwrt-packages: ${latest_commit_message}\n"
+          combined_commit_message+="Updates from sbwml/package_kernel_r8125: ${latest_commit_message_r8125}\n"
+          combined_commit_message+="Updates from pymumu/openwrt-smartdns: ${latest_commit_message_smartdns}\n"
+          combined_commit_message+="Updates from pymumu/luci-app-smartdns: ${latest_commit_message_luci_app_smartdns}\n"
+          git commit -m "${combined_commit_message}"
           git push origin main
         fi
