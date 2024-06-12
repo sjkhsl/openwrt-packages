@@ -29,7 +29,7 @@ jobs:
       run: |
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse subfolder
         cd subfolder
-        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash nps upx ucl luci-lib-fs wrtbwmon v2dat 
+        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash nps upx ucl luci-lib-fs wrtbwmon v2dat luci-app-upnp miniupnpd
         rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf subfolder
@@ -83,7 +83,7 @@ jobs:
           sed -i 's|include ../../luci.mk|include $(TOPDIR)/feeds/luci/luci.mk|' "$makefile_path"
         fi
 
-     #- name: Remove Useless directory
+    #- name: Remove Useless directory
     #  run: |
     #    rm -rf "${{ github.workspace }}/1"
     #    rm -rf "${{ github.workspace }}/2"
