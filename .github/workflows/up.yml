@@ -54,7 +54,7 @@ jobs:
         git clone --depth 1 https://github.com/sbwml/package_kernel_r8125.git temp_r8125
         rsync -av --exclude='.git' temp_r8125/ "${{ github.workspace }}/r8125/"
         cd temp_r8125
-        latest_commit_message=$(git log -1 --pretty=%B)
+        latest_commit_message_r8125=$(git log -1 --pretty=%B)
         cd ..
         rm -rf temp_r8125
 
@@ -76,11 +76,18 @@ jobs:
         cd ..
         rm -rf temp_luci_app_smartdns
 
-    #- name: Remove Useless directory
+    - name: Modify Makefile in luci-app-smartdns
+      run: |
+        makefile_path="${{ github.workspace }}/luci-app-smartdns/Makefile"
+        if grep -q "include ../../luci.mk" "$makefile_path"; then
+          sed -i 's|include ../../luci.mk|include $(TOPDIR)/feeds/luci/luci.mk|' "$makefile_path"
+        fi
+
+     #- name: Remove Useless directory
     #  run: |
     #    rm -rf "${{ github.workspace }}/1"
     #    rm -rf "${{ github.workspace }}/2"
-    #    rm -rf "${{ github.workspace }}/3"        
+    #    rm -rf "${{ github.workspace }}/3"         
 
     - name: Check for changes
       run: |
