@@ -34,9 +34,11 @@ jobs:
         cd ..
         rm -rf subfolder
 
-    #- name: Remove Useless directory
-    #  run: |
-    #    rm -rf "${{ github.workspace }}/r8125"
+    - name: Remove r8125
+      run: |
+        rm -rf "${{ github.workspace }}/r8125"
+        rm -rf "${{ github.workspace }}/luci-app-smartdns"
+        rm -rf "${{ github.workspace }}/smartdns"
 
     - name: Clone and sparse-checkout subfolder from Repo 2
       run: |
@@ -52,18 +54,6 @@ jobs:
     - name: Remove temporary folder
       run: |
         rm -rf temp
-
-    - name: Clone r8125 repository
-      run: |
-        git clone --depth 1 https://github.com/sbwml/package_kernel_r8125.git "${{ github.workspace }}/r8125"
-
-    - name: Clone openwrt-smartdns repository
-      run: |
-        git clone --depth 1 https://github.com/pymumu/openwrt-smartdns.git "${{ github.workspace }}/smartdns"
-
-    - name: Clone luci-app-smartdns repository
-      run: |
-        git clone --depth 1 https://github.com/pymumu/luci-app-smartdns.git "${{ github.workspace }}/luci-app-smartdns"
 
     - name: Check for changes
       run: |
