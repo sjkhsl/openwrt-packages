@@ -33,7 +33,7 @@ jobs:
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo1
         cd temp_repo1
         git sparse-checkout init --cone
-        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon
+        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial
         rsync -avvv --delete --exclude='.git' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf temp_repo1
