@@ -65,6 +65,7 @@ jobs:
         git sparse-checkout init --cone
         git sparse-checkout set nps upx ucl luci-lib-fs
         rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
+        cd ..
         rm -rf temp_repo4
 
     - name: Clone kiddin9-5
