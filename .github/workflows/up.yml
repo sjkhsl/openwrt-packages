@@ -1,0 +1,82 @@
+name: On Push and Schedule Workflow
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 */5 * * *'  # 每隔5小时执行一次
+
+jobs:
+  clone_and_check_for_changes:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Git credentials
+      uses: de-vri-es/setup-git-credentials@v2
+      with:
+        credentials: https://sjkhsl:${{ secrets.TOKEN_SJKHSL }}@github.com/
+
+    - name: Configure Git user
+      run: |
+        git config --global user.email "sjkhsl@qq.com"
+        git config --global user.name "sjkhsl"
+
+    - name: Check disk space before operation
+      run: df -h
+
+    - name: Clone and sparse-checkout from Repo 1 (Batch 1)
+      run: |
+        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo1
+        cd temp_repo1
+        git sparse-checkout init --cone
+        git sparse-checkout set luci-app-autoreboot luci-app-ramfree
+        rsync -avvv --partial --delete --exclude='.git' --exclude='.github/workflows/' ./ "${{ github.workspace }}/" || (exit_code=$? && if [ $exit_code -ne 24 ]; then exit $exit_code; fi)
+        cd ..
+        rm -rf temp_repo1
+
+    - name: Clone and sparse-checkout from Repo 2
+      run: |
+        git clone --depth 1 https://github.com/Lienol/openwrt.git --branch main --single-branch temp_repo2
+        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_repo2/package/default-settings/ ${{ github.workspace }}/default-settings/
+        rm -rf temp_repo2
+
+    - name: Clone r8125 repository
+      run: |
+        git clone --depth 1 https://github.com/sbwml/package_kernel_r8125.git temp_r8125
+        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_r8125/ "${{ github.workspace }}/r8125/"
+        rm -rf temp_r8125
+
+    - name: Clone openwrt-smartdns repository
+      run: |
+        git clone --depth 1 https://github.com/pymumu/openwrt-smartdns.git temp_smartdns
+        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_smartdns/ "${{ github.workspace }}/smartdns/"
+        rm -rf temp_smartdns
+
+    - name: Clone luci-app-smartdns repository
+      run: |
+        git clone --depth 1 https://github.com/pymumu/luci-app-smartdns.git temp_luci_app_smartdns
+        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_luci_app_smartdns/ "${{ github.workspace }}/luci-app-smartdns/"
+        rm -rf temp_luci_app_smartdns
+
+    - name: Modify Makefile in luci-app-smartdns
+      run: |
+        makefile_path="${{ github.workspace }}/luci-app-smartdns/Makefile"
+        if grep -q "include ../../luci.mk" "$makefile_path"; then
+          sed -i 's|include ../../luci.mk|include $(TOPDIR)/feeds/luci/luci.mk|' "$makefile_path"
+        fi
+
+    - name: Check for changes
+      run: |
+        cd "${{ github.workspace }}"
+        git add -A
+        if git diff --staged --quiet; then
+          echo "No changes detected. Skipping push."
+        else
+          echo "Changes detected. Pushing updates..."
+          git commit -m "Updated submodules on $(date +'%Y-%m-%d %H:%M:%S')"
+          git push origin main
+        fi
