@@ -112,12 +112,16 @@ jobs:
     - name: Clone homeproxy
       run: |
         git clone --depth 1 https://github.com/immortalwrt/homeproxy.git temp_homeproxy
+        echo "Syncing temp_homeproxy to luci-app-homeproxy..."
         rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_homeproxy/ "${{ github.workspace }}/luci-app-homeproxy/"
+        echo "Removing temp_homeproxy directory..."
         rm -rf temp_homeproxy
 
     - name: Conditional Directory Deletion
       run: |
+        echo "Checking if DIRECTORY_PATH is set..."
         if [ -n "${DIRECTORY_PATH}" ]; then
+          echo "DIRECTORY_PATH is set to: ${DIRECTORY_PATH}"
           if [ -d "${DIRECTORY_PATH}" ]; then
             echo "Deleting directory: ${DIRECTORY_PATH}"
             rm -rf "${DIRECTORY_PATH}"
