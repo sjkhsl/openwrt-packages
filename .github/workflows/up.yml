@@ -28,7 +28,7 @@ jobs:
     - name: Check disk space before operation
       run: df -h
 
-    - name: Clone kiddin9 1
+    - name: Clone kiddin9-1
       run: |
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo1
         cd temp_repo1
@@ -38,7 +38,7 @@ jobs:
         cd ..
         rm -rf temp_repo1
 
-    - name: Clone kiddin9 2
+    - name: Clone kiddin9-2
       run: |
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo2
         cd temp_repo2
@@ -48,7 +48,7 @@ jobs:
         cd ..
         rm -rf temp_repo2        
 
-    - name: Clone kiddin9 3
+    - name: Clone kiddin9-3
       run: |
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo3
         cd temp_repo3
@@ -58,7 +58,7 @@ jobs:
         cd ..
         rm -rf temp_repo3    
 
-    - name: Clone kiddin9 4
+    - name: Clone kiddin9-4
       run: |
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo4
         cd temp_repo4
@@ -67,7 +67,7 @@ jobs:
         rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         rm -rf temp_repo4
 
-    - name: Clone kiddin9 5
+    - name: Clone kiddin9-5
       run: |
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo5
         cd temp_repo5
