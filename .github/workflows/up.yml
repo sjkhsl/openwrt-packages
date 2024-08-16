@@ -109,26 +109,23 @@ jobs:
           sed -i 's|include ../../luci.mk|include $(TOPDIR)/feeds/luci/luci.mk|' "$makefile_path"
         fi
 
-    - name: Clone homeproxy
-      run: |
-        echo "Cloning repository..."
-        git clone --depth 1 https://github.com/immortalwrt/homeproxy.git temp_homeproxy
-        echo "Syncing temp_homeproxy to luci-app-homeproxy..."
-        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_homeproxy/ "${{ github.workspace }}/luci-app-homeproxy/"
-        echo "Removing temp_homeproxy directory..."
-        rm -rf temp_homeproxy
-        echo "Sync complete. Checking contents of luci-app-homeproxy..."
-        ls -la "${{ github.workspace }}/luci-app-homeproxy/"
+   # - name: Clone homeproxy
+   #   run: |
+    #    echo "Cloning repository..."
+    #    git clone --depth 1 https://github.com/immortalwrt/homeproxy.git temp_homeproxy
+    #    echo "Syncing temp_homeproxy to luci-app-homeproxy..."
+     #   rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_homeproxy/ "${{ github.workspace }}/luci-app-homeproxy/"
+    #    echo "Removing temp_homeproxy directory..."
+     #   rm -rf temp_homeproxy
+     #   echo "Sync complete. Checking contents of luci-app-homeproxy..."
+      #  ls -la "${{ github.workspace }}/luci-app-homeproxy/"
 
     - name: Conditional Directory Deletion
       run: |
-        echo "Checking if DIRECTORY_PATH is set..."
         if [ -n "${DIRECTORY_PATH}" ]; then
-          echo "DIRECTORY_PATH is set to: ${DIRECTORY_PATH}"
           if [ -d "${DIRECTORY_PATH}" ]; then
             echo "Deleting directory: ${DIRECTORY_PATH}"
             rm -rf "${DIRECTORY_PATH}"
-            echo "Directory deleted."
           else
             echo "Directory does not exist: ${DIRECTORY_PATH}"
           fi
@@ -136,7 +133,7 @@ jobs:
           echo "No directory specified. Skipping deletion."
         fi
       env:
-        DIRECTORY_PATH: "${{ github.workspace }}/luci-app-home"  # 在这里填写要删除的完整目录路径
+        DIRECTORY_PATH: "luci-app-home"  # 这里使用相对路径
 
     - name: Check for changes
       run: |
