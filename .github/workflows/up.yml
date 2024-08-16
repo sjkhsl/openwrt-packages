@@ -25,6 +25,9 @@ jobs:
         git config --global user.email "sjkhsl@qq.com"
         git config --global user.name "sjkhsl"
 
+    - name: Check disk space before operation
+      run: df -h
+
     - name: Clone and sparse-checkout from Repo 1
       run: |
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo1
@@ -34,6 +37,9 @@ jobs:
         rsync -avvv --delete --exclude='.git' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf temp_repo1
+
+    - name: Clean up workspace
+      run: df -h
 
     - name: Clone and sparse-checkout from Repo 2
       run: |
