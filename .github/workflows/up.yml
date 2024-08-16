@@ -25,55 +25,38 @@ jobs:
         git config --global user.email "sjkhsl@qq.com"
         git config --global user.name "sjkhsl"
 
-    - name: Clone and sparse-checkout subfolder from Repo 1
+    - name: Clone and sparse-checkout from Repo 1
       run: |
-        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse subfolder
-        cd subfolder
-        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash nps upx ucl luci-lib-fs wrtbwmon v2dat luci-app-upnp miniupnpd
-        rsync -avvv --no-perms --no-owner --no-group --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
+        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo1
+        cd temp_repo1
+        git sparse-checkout init --cone
+        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash nps upx ucl luci-lib-fs wrtbwmon v2dat netdata
+        rsync -av --delete --exclude='.git' ./ "${{ github.workspace }}/"
         cd ..
-        rm -rf subfolder
+        rm -rf temp_repo1
 
-    - name: Clone and sparse-checkout subfolder from Repo 2
+    - name: Clone and sparse-checkout from Repo 2
       run: |
-        git clone --depth 1 https://github.com/Lienol/openwrt.git --branch main --single-branch temp
-        mkdir -p temp/default-settings
-        mv temp/package/default-settings/* temp/default-settings/
-        rm -rf temp/package
-
-    - name: Sync default-settings folder
-      run: |
-        rsync -av --delete temp/default-settings/ ${{ github.workspace }}/default-settings/
-
-    - name: Remove temporary folder
-      run: |
-        rm -rf temp
+        git clone --depth 1 https://github.com/Lienol/openwrt.git --branch main --single-branch temp_repo2
+        rsync -av --delete --exclude='.git' temp_repo2/package/default-settings/ ${{ github.workspace }}/default-settings/
+        rm -rf temp_repo2
 
     - name: Clone r8125 repository
       run: |
         git clone --depth 1 https://github.com/sbwml/package_kernel_r8125.git temp_r8125
-        rsync -av --exclude='.git' temp_r8125/ "${{ github.workspace }}/r8125/"
-        cd temp_r8125
-        latest_commit_message_r8125=$(git log -1 --pretty=%B)
-        cd ..
+        rsync -av --delete --exclude='.git' temp_r8125/ "${{ github.workspace }}/r8125/"
         rm -rf temp_r8125
 
     - name: Clone openwrt-smartdns repository
       run: |
         git clone --depth 1 https://github.com/pymumu/openwrt-smartdns.git temp_smartdns
-        rsync -av --exclude='.git' temp_smartdns/ "${{ github.workspace }}/smartdns/"
-        cd temp_smartdns
-        latest_commit_message_smartdns=$(git log -1 --pretty=%B)
-        cd ..
+        rsync -av --delete --exclude='.git' temp_smartdns/ "${{ github.workspace }}/smartdns/"
         rm -rf temp_smartdns
 
     - name: Clone luci-app-smartdns repository
       run: |
         git clone --depth 1 https://github.com/pymumu/luci-app-smartdns.git temp_luci_app_smartdns
-        rsync -av --exclude='.git' temp_luci_app_smartdns/ "${{ github.workspace }}/luci-app-smartdns/"
-        cd temp_luci_app_smartdns
-        latest_commit_message_luci_app_smartdns=$(git log -1 --pretty=%B)
-        cd ..
+        rsync -av --delete --exclude='.git' temp_luci_app_smartdns/ "${{ github.workspace }}/luci-app-smartdns/"
         rm -rf temp_luci_app_smartdns
 
     - name: Modify Makefile in luci-app-smartdns
@@ -83,12 +66,6 @@ jobs:
           sed -i 's|include ../../luci.mk|include $(TOPDIR)/feeds/luci/luci.mk|' "$makefile_path"
         fi
 
-    #- name: Remove Useless directory
-    #  run: |
-    #    rm -rf "${{ github.workspace }}/1"
-    #    rm -rf "${{ github.workspace }}/2"
-    #    rm -rf "${{ github.workspace }}/3"         
-
     - name: Check for changes
       run: |
         cd "${{ github.workspace }}"
@@ -97,11 +74,5 @@ jobs:
           echo "No changes detected. Skipping push."
         else
           echo "Changes detected. Pushing updates..."
-          combined_commit_message="Updated submodules on $(date +'%Y-%m-%d %H:%M:%S')\n\n"
-          combined_commit_message+="Updates from kiddin9/openwrt-packages: ${latest_commit_message}\n"
-          combined_commit_message+="Updates from sbwml/package_kernel_r8125: ${latest_commit_message_r8125}\n"
-          combined_commit_message+="Updates from pymumu/openwrt-smartdns: ${latest_commit_message_smartdns}\n"
-          combined_commit_message+="Updates from pymumu/luci-app-smartdns: ${latest_commit_message_luci_app_smartdns}\n"
-          git commit -m "${combined_commit_message}"
+          git commit -m "Updated submodules on $(date +'%Y-%m-%d %H:%M:%S')"
           git push origin main
-        fi
