@@ -34,55 +34,54 @@ jobs:
         cd temp_repo1
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager
-        rsync -avvv --partial --delete --exclude='.git' --exclude='.github/workflows/' ./ "${{ github.workspace }}/" || (exit_code=$? && if [ $exit_code -ne 24 ]; then exit $exit_code; fi)
+        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf temp_repo1
 
     - name: Clone kiddin9 2
       run: |
-        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo1
-        cd temp_repo1
+        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo2
+        cd temp_repo2
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial
-        rsync -avvv --partial --delete --exclude='.git' --exclude='.github/workflows/' ./ "${{ github.workspace }}/" || (exit_code=$? && if [ $exit_code -ne 24 ]; then exit $exit_code; fi)
+        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
-        rm -rf temp_repo1        
+        rm -rf temp_repo2        
 
     - name: Clone kiddin9 3
       run: |
-        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo1
-        cd temp_repo1
+        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo3
+        cd temp_repo3
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash
-        rsync -avvv --partial --delete --exclude='.git' --exclude='.github/workflows/' ./ "${{ github.workspace }}/" || (exit_code=$? && if [ $exit_code -ne 24 ]; then exit $exit_code; fi)
+        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
-        rm -rf temp_repo1     
+        rm -rf temp_repo3    
 
     - name: Clone kiddin9 4
       run: |
-        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo1
-        cd temp_repo1
+        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo4
+        cd temp_repo4
         git sparse-checkout init --cone
         git sparse-checkout set nps upx ucl luci-lib-fs
-        rsync -avvv --partial --delete --exclude='.git' --exclude='.github/workflows/' ./ "${{ github.workspace }}/" || (exit_code=$? && if [ $exit_code -ne 24 ]; then exit $exit_code; fi)
-        cd ..
-        rm -rf temp_repo1
+        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
+        rm -rf temp_repo4
 
     - name: Clone kiddin9 5
       run: |
-        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo1
-        cd temp_repo1
+        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo5
+        cd temp_repo5
         git sparse-checkout init --cone
         git sparse-checkout set wrtbwmon v2dat netdata
-        rsync -avvv --partial --delete --exclude='.git' --exclude='.github/workflows/' ./ "${{ github.workspace }}/" || (exit_code=$? && if [ $exit_code -ne 24 ]; then exit $exit_code; fi)
+        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
-        rm -rf temp_repo1
+        rm -rf temp_repo5
 
     - name: Clone Lienol-default-settings
       run: |
-        git clone --depth 1 https://github.com/Lienol/openwrt.git --branch main --single-branch temp_repo2
-        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_repo2/package/default-settings/ ${{ github.workspace }}/default-settings/
-        rm -rf temp_repo2
+        git clone --depth 1 https://github.com/Lienol/openwrt.git --branch main --single-branch temp_default-settings
+        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_default-settings/package/default-settings/ ${{ github.workspace }}/default-settings/
+        rm -rf temp_default-settings
 
     - name: Clone r8125 repository
       run: |
