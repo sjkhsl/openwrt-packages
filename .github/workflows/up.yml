@@ -33,7 +33,7 @@ jobs:
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo1
         cd temp_repo1
         git sparse-checkout init --cone
-        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager luci-app-upnp
+        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager
         rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf temp_repo1
@@ -73,7 +73,7 @@ jobs:
         git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo5
         cd temp_repo5
         git sparse-checkout init --cone
-        git sparse-checkout set wrtbwmon v2dat netdata miniupnpd
+        git sparse-checkout set wrtbwmon v2dat netdata
         rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf temp_repo5
@@ -128,7 +128,7 @@ jobs:
           echo "No directory specified. Skipping deletion."
         fi
       env:
-        DIRECTORY_PATH: ""  # 这里使用相对路径
+        DIRECTORY_PATH: "miniupnpd luci-app-upnp"  # 这里使用相对路径
 
     - name: Check for changes
       run: |
