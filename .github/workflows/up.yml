@@ -128,7 +128,7 @@ jobs:
           echo "No directory specified. Skipping deletion."
         fi
       env:
-        DIRECTORY_PATH: "miniupnpd luci-app-upnp"  # 这里使用相对路径
+        DIRECTORY_PATH: "miniupnpd"  # 这里使用相对路径
 
     - name: Check for changes
       run: |
