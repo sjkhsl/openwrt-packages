@@ -30,7 +30,7 @@ jobs:
 
     - name: Clone kiddin9-1
       run: |
-        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch master --single-branch --sparse temp_repo1
+        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo1
         cd temp_repo1
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager
@@ -40,7 +40,7 @@ jobs:
 
     - name: Clone kiddin9-2
       run: |
-        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo2
+        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo2
         cd temp_repo2
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial
@@ -50,7 +50,7 @@ jobs:
 
     - name: Clone kiddin9-3
       run: |
-        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo3
+        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo3
         cd temp_repo3
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash
@@ -60,7 +60,7 @@ jobs:
 
     - name: Clone kiddin9-4
       run: |
-        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo4
+        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo4
         cd temp_repo4
         git sparse-checkout init --cone
         git sparse-checkout set nps upx ucl luci-lib-fs
@@ -70,7 +70,7 @@ jobs:
 
     - name: Clone kiddin9-5
       run: |
-        git clone --depth 1 https://github.com/kiddin9/openwrt-packages.git --branch master --single-branch --sparse temp_repo5
+        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo5
         cd temp_repo5
         git sparse-checkout init --cone
         git sparse-checkout set wrtbwmon v2dat netdata
