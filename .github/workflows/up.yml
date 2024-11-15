@@ -115,6 +115,12 @@ jobs:
         rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_homeproxy/ "${{ github.workspace }}/luci-app-homeproxy/"
         rm -rf temp_homeproxy
 
+    - name: Clone OpenWrt-mihomo
+      run: |
+        git clone --depth 1 https://github.com/morytyann/OpenWrt-mihomo.git temp_OpenWrt-mihomo
+        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_OpenWrt-mihomo/ "${{ github.workspace }}/luci-app-mihomo/"
+        rm -rf temp_OpenWrt-mihomo
+
     - name: Conditional Directory Deletion
       run: |
         if [ -n "${DIRECTORY_PATH}" ]; then
