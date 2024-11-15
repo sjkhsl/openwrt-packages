@@ -109,11 +109,11 @@ jobs:
           sed -i 's|include ../../luci.mk|include $(TOPDIR)/feeds/luci/luci.mk|' "$makefile_path"
         fi
 
-    #- name: Clone homeproxy
-    #  run: |
-    #    git clone --depth 1 https://github.com/muink/luci-app-homeproxy.git temp_homeproxy
-    #    rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_homeproxy/ "${{ github.workspace }}/luci-app-homeproxy/"
-    #    rm -rf temp_homeproxy
+    - name: Clone homeproxy
+      run: |
+        git clone --depth 1 https://github.com/immortalwrt/homeproxy.git temp_homeproxy
+        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_homeproxy/ "${{ github.workspace }}/luci-app-homeproxy/"
+        rm -rf temp_homeproxy
 
     - name: Conditional Directory Deletion
       run: |
@@ -128,7 +128,7 @@ jobs:
           echo "No directory specified. Skipping deletion."
         fi
       env:
-        DIRECTORY_PATH: "luci-app-homeproxy"  # 这里使用相对路径
+        DIRECTORY_PATH: ""  # 这里使用相对路径
 
     - name: Check for changes
       run: |
