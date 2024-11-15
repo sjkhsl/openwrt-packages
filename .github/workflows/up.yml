@@ -84,11 +84,11 @@ jobs:
         rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_default-settings/package/default-settings/ ${{ github.workspace }}/default-settings/
         rm -rf temp_default-settings
 
-    - name: Clone r8125 repository
-      run: |
-        git clone --depth 1 https://github.com/sbwml/package_kernel_r8125.git temp_r8125
-        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_r8125/ "${{ github.workspace }}/r8125/"
-        rm -rf temp_r8125
+    #- name: Clone r8125 repository
+    #  run: |
+    #    git clone --depth 1 https://github.com/sbwml/package_kernel_r8125.git temp_r8125
+    #    rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_r8125/ "${{ github.workspace }}/r8125/"
+    #    rm -rf temp_r8125
 
     - name: Clone openwrt-smartdns repository
       run: |
@@ -128,7 +128,7 @@ jobs:
           echo "No directory specified. Skipping deletion."
         fi
       env:
-        DIRECTORY_PATH: ""  # 这里使用相对路径
+        DIRECTORY_PATH: "r8125"  # 这里使用相对路径
 
     - name: Check for changes
       run: |
