@@ -34,29 +34,19 @@ jobs:
         cd temp_repo1
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager
-        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
+        rsync -av --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf temp_repo1
 
     - name: Clone kiddin9-2
       run: |
-        # 1. 先clone
         git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo2
         cd temp_repo2
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial
+        rsync -av --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
-
-    - name: Remove old netdata folder
-      run: |
-        # 2. 清理旧的目录，避免与新rsync冲突
-        rm -rf "${{ github.workspace }}/luci-app-netdata"
-
-    - name: Rsync kiddin9-2
-      run: |
-        # 3. 再进行rsync
-        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./temp_repo2/ "${{ github.workspace }}/"
-        rm -rf temp_repo2     
+        rm -rf temp_repo2        
 
     - name: Clone kiddin9-3
       run: |
@@ -64,7 +54,7 @@ jobs:
         cd temp_repo3
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash
-        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
+        rsync -av --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf temp_repo3    
 
@@ -74,7 +64,7 @@ jobs:
         cd temp_repo4
         git sparse-checkout init --cone
         git sparse-checkout set nps upx ucl luci-lib-fs
-        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
+        rsync -av --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf temp_repo4
 
@@ -84,7 +74,7 @@ jobs:
         cd temp_repo5
         git sparse-checkout init --cone
         git sparse-checkout set wrtbwmon v2dat netdata
-        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
+        rsync -av --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf temp_repo5
 
