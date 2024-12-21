@@ -30,32 +30,50 @@ jobs:
 
     - name: Clone kiddin9-1
       run: |
-        # 先清理老目录
-        rm -rf "${{ github.workspace }}/luci-app-autoreboot"
-        rm -rf "${{ github.workspace }}/luci-app-ramfree"
-        rm -rf "${{ github.workspace }}/luci-app-diskman"
-        rm -rf "${{ github.workspace }}/luci-app-nginx-manager"
-
-        # 再执行clone + rsync
         git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git \
            --branch main --single-branch --sparse temp_repo1
         cd temp_repo1
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager
-        rsync -av --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' \
-            ./ "${{ github.workspace }}/"
         cd ..
+
+    - name: Remove old netdata folder
+      run: |
+        # 2. 清理旧的目录，避免与新rsync冲突
+        rm -rf "${{ github.workspace }}/luci-app-autoreboot"
+        rm -rf "${{ github.workspace }}/luci-app-ramfree"
+        rm -rf "${{ github.workspace }}/luci-app-diskman"
+        rm -rf "${{ github.workspace }}/luci-app-nginx-manager"
+
+    - name: Rsync kiddin9-1
+      run: |
+        # 3. 再进行rsync
+        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./temp_repo1/ "${{ github.workspace }}/"
         rm -rf temp_repo1
 
     - name: Clone kiddin9-2
       run: |
+        # 1. 先clone
         git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo2
         cd temp_repo2
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial
-        rsync -av --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
-        rm -rf temp_repo2        
+
+    - name: Remove old netdata folder
+      run: |
+        # 2. 清理旧的目录，避免与新rsync冲突
+        rm -rf "${{ github.workspace }}/luci-app-netdata"
+        rm -rf "${{ github.workspace }}/luci-app-filetransfer"
+        rm -rf "${{ github.workspace }}/luci-app-poweroffdevice"
+        rm -rf "${{ github.workspace }}/luci-app-syncdial"
+
+    - name: Rsync kiddin9-2
+      run: |
+        # 3. 再进行rsync
+        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./temp_repo2/ "${{ github.workspace }}/"
+        rm -rf temp_repo2
+        
 
     - name: Clone kiddin9-3
       run: |
