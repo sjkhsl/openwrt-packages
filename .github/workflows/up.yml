@@ -44,7 +44,7 @@ jobs:
         git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo2
         cd temp_repo2
         git sparse-checkout init --cone
-        git sparse-checkout set luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice
+        git sparse-checkout set luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial
         cd ..
 
     - name: Remove old netdata folder
