@@ -30,8 +30,7 @@ jobs:
 
     - name: Clone kiddin9-1
       run: |
-        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git \
-           --branch main --single-branch --sparse temp_repo1
+        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo1
         cd temp_repo1
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager
@@ -81,8 +80,19 @@ jobs:
         cd temp_repo3
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash
-        rsync -av --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
+        
+    - name: Remove old netdata folder
+      run: |
+        # 2. 清理旧的目录，避免与新rsync冲突
+        rm -rf "${{ github.workspace }}/luci-app-nps"
+        rm -rf "${{ github.workspace }}/luci-theme-edge"
+        rm -rf "${{ github.workspace }}/luci-app-wrtbwmon"
+        rm -rf "${{ github.workspace }}/luci-app-openclash"
+
+    - name: Rsync kiddin9-3
+      run: |      
+        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./temp_repo3/ "${{ github.workspace }}/"
         rm -rf temp_repo3    
 
     - name: Clone kiddin9-4
@@ -91,8 +101,19 @@ jobs:
         cd temp_repo4
         git sparse-checkout init --cone
         git sparse-checkout set nps upx ucl luci-lib-fs
-        rsync -av --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
+        
+    - name: Remove old netdata folder
+      run: |
+        # 2. 清理旧的目录，避免与新rsync冲突
+        rm -rf "${{ github.workspace }}/nps"
+        rm -rf "${{ github.workspace }}/upx"
+        rm -rf "${{ github.workspace }}/ucl"
+        rm -rf "${{ github.workspace }}/luci-lib-fs"
+
+    - name: Rsync kiddin9-4
+      run: |      
+        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./temp_repo4/ "${{ github.workspace }}/"
         rm -rf temp_repo4
 
     - name: Clone kiddin9-5
@@ -101,8 +122,19 @@ jobs:
         cd temp_repo5
         git sparse-checkout init --cone
         git sparse-checkout set wrtbwmon v2dat netdata
-        rsync -av --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
+
+    - name: Remove old netdata folder
+      run: |
+        # 2. 清理旧的目录，避免与新rsync冲突
+        rm -rf "${{ github.workspace }}/set"
+        rm -rf "${{ github.workspace }}/wrtbwmon"
+        rm -rf "${{ github.workspace }}/v2dat"
+        rm -rf "${{ github.workspace }}/netdata"
+
+    - name: Rsync kiddin9-5
+      run: |      
+        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./temp_repo5/ "${{ github.workspace }}/"
         rm -rf temp_repo5
 
     - name: Clone Lienol-default-settings
