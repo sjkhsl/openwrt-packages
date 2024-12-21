@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 */24 * * *'  # 每隔5小时执行一次
+    - cron: '0 */24 * * *'  # 每24小时执行一次
 
 jobs:
   clone_and_check_for_changes:
@@ -28,73 +28,32 @@ jobs:
     - name: Check disk space before operation
       run: df -h
 
-    - name: Clone kiddin9-1
+    - name: Clone and Sync Multiple Repositories
       run: |
-        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo1
-        cd temp_repo1
-        git sparse-checkout init --cone
-        git sparse-checkout set luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager
-        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
-        cd ..
-        rm -rf temp_repo1
-
-    - name: Clone kiddin9-2
-      run: |
-        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo2
-        cd temp_repo2
-        git sparse-checkout init --cone
-        git sparse-checkout set luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial
-        # 检查目录完整性
-        echo "Checking temp_repo2 contents before sync:"
-        ls -al
-        # 增加延迟，避免冲突
-        sleep 1
-        # 同步时忽略“文件消失”错误
-        rsync -av --ignore-missing-args --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
-        cd ..
-        rm -rf temp_repo2
-
-    - name: Clone kiddin9-3
-      run: |
-        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo3
-        cd temp_repo3
-        git sparse-checkout init --cone
-        git sparse-checkout set luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash
-        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
-        cd ..
-        rm -rf temp_repo3    
-
-    - name: Clone kiddin9-4
-      run: |
-        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo4
-        cd temp_repo4
-        git sparse-checkout init --cone
-        git sparse-checkout set nps upx ucl luci-lib-fs
-        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
-        cd ..
-        rm -rf temp_repo4
-
-    - name: Clone kiddin9-5
-      run: |
-        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo5
-        cd temp_repo5
-        git sparse-checkout init --cone
-        git sparse-checkout set wrtbwmon v2dat netdata
-        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
-        cd ..
-        rm -rf temp_repo5
+        REPO_LIST=(
+          "luci-app-autoreboot luci-app-ramfree luci-app-diskman luci-app-nginx-manager"
+          "luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial"
+          "luci-app-nps luci-theme-edge luci-app-wrtbwmon luci-app-openclash"
+          "nps upx ucl luci-lib-fs"
+          "wrtbwmon v2dat netdata"
+        )
+        for i in "${!REPO_LIST[@]}"; do
+          TEMP_DIR="temp_repo_$((i+1))"
+          echo "Cloning into ${TEMP_DIR}..."
+          git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse "${TEMP_DIR}"
+          cd "${TEMP_DIR}"
+          git sparse-checkout init --cone
+          git sparse-checkout set ${REPO_LIST[$i]}
+          rsync -av --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
+          cd ..
+          rm -rf "${TEMP_DIR}"
+        done
 
     - name: Clone Lienol-default-settings
       run: |
         git clone --depth 1 https://github.com/Lienol/openwrt.git --branch main --single-branch temp_default-settings
         rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_default-settings/package/default-settings/ ${{ github.workspace }}/default-settings/
         rm -rf temp_default-settings
-
-    #- name: Clone r8125 repository
-    #  run: |
-    #    git clone --depth 1 https://github.com/sbwml/package_kernel_r8125.git temp_r8125
-    #    rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_r8125/ "${{ github.workspace }}/r8125/"
-    #    rm -rf temp_r8125
 
     - name: Clone openwrt-smartdns repository
       run: |
@@ -126,21 +85,6 @@ jobs:
         git clone --depth 1 https://github.com/morytyann/OpenWrt-mihomo.git temp_OpenWrt-mihomo
         rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_OpenWrt-mihomo/ "${{ github.workspace }}/luci-app-mihomo/"
         rm -rf temp_OpenWrt-mihomo
-
-    - name: Conditional Directory Deletion
-      run: |
-        if [ -n "${DIRECTORY_PATH}" ]; then
-          if [ -d "${DIRECTORY_PATH}" ]; then
-            echo "Deleting directory: ${DIRECTORY_PATH}"
-            rm -rf "${DIRECTORY_PATH}"
-          else
-            echo "Directory does not exist: ${DIRECTORY_PATH}"
-          fi
-        else
-          echo "No directory specified. Skipping deletion."
-        fi
-      env:
-        DIRECTORY_PATH: ""  # 这里使用相对路径
 
     - name: Check for changes
       run: |
