@@ -44,10 +44,15 @@ jobs:
         cd temp_repo2
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-filetransfer luci-app-netdata luci-app-poweroffdevice luci-app-syncdial
-        rsync -av --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' --no-links --force ./ "${{ github.workspace }}/"
+        # 检查目录完整性
+        echo "Checking temp_repo2 contents before sync:"
+        ls -al
+        # 增加延迟，避免冲突
+        sleep 1
+        # 同步时忽略“文件消失”错误
+        rsync -av --ignore-missing-args --delete --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./ "${{ github.workspace }}/"
         cd ..
         rm -rf temp_repo2
-        
 
     - name: Clone kiddin9-3
       run: |
