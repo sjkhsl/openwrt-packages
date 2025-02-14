@@ -176,9 +176,9 @@ jobs:
 
     - name: Clone OpenWrt-mihomo
       run: |
-        git clone --depth 1 https://github.com/morytyann/OpenWrt-mihomo.git temp_OpenWrt-mihomo
-        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_OpenWrt-mihomo/ "${{ github.workspace }}/luci-app-mihomo/"
-        rm -rf temp_OpenWrt-mihomo
+        git clone --depth 1 https://github.com/nikkinikki-org/OpenWrt-nikki.git temp_OpenWrt-nikki
+        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_OpenWrt-nikki/ "${{ github.workspace }}/luci-app-nikki/"
+        rm -rf temp_OpenWrt-nikki
 
     - name: Conditional Directory Deletion
       run: |
@@ -193,7 +193,7 @@ jobs:
           echo "No directory specified. Skipping deletion."
         fi
       env:
-        DIRECTORY_PATH: ""  # 这里使用相对路径
+        DIRECTORY_PATH: "luci-app-mihomo"  # 这里使用相对路径
 
     - name: Check for changes
       run: |
