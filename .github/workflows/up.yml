@@ -137,24 +137,6 @@ jobs:
         rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./temp_repo5/ "${{ github.workspace }}/"
         rm -rf temp_repo5
 
-    - name: Clone kiddin9-6
-      run: |
-        git clone --depth 1 https://github.com/kiddin9/kwrt-packages.git --branch main --single-branch --sparse temp_repo6
-        cd temp_repo6
-        git sparse-checkout init --cone
-        git sparse-checkout set luci-app-accesscontrol-plus
-        cd ..
-        
-    - name: Remove old netdata folder
-      run: |
-        # 2. 清理旧的目录，避免与新rsync冲突
-        rm -rf "${{ github.workspace }}/luci-app-accesscontrol-plus"
-
-    - name: Rsync kiddin9-6
-      run: |      
-        rsync -av --exclude='.git' --exclude='.gitignore' --exclude='LICENSE' --exclude='README.md' ./temp_repo6/ "${{ github.workspace }}/"
-        rm -rf temp_repo6
-
     - name: Clone Lienol-default-settings
       run: |
         git clone --depth 1 https://github.com/Lienol/openwrt.git --branch main --single-branch temp_default-settings
@@ -211,7 +193,7 @@ jobs:
           echo "No directory specified. Skipping deletion."
         fi
       env:
-        DIRECTORY_PATH: "luci-app-mihomo"  # 这里使用相对路径
+        DIRECTORY_PATH: "luci-app-accesscontrol-plus"  # 这里使用相对路径
 
     - name: Check for changes
       run: |
