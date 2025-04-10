@@ -193,7 +193,7 @@ jobs:
           echo "No directory specified. Skipping deletion."
         fi
       env:
-        DIRECTORY_PATH: "luci-app-accesscontrol-plus"  # 这里使用相对路径
+        DIRECTORY_PATH: ""  # 这里使用相对路径
 
     - name: Check for changes
       run: |
