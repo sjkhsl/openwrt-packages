@@ -139,9 +139,15 @@ jobs:
 
     - name: Clone Lienol-default-settings
       run: |
-        git clone --depth 1 https://github.com/Lienol/openwrt.git --branch main --single-branch temp_default-settings
-        rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_default-settings/package/default-settings/ ${{ github.workspace }}/default-settings/
+        git clone --depth 1 https://github.com/Lienol/openwrt.git --branch 24.10 --single-branch temp_default-settings
+        if [ -d "temp_default-settings/package/default-settings" ]; then
+            rsync -av --delete --exclude='.git' --exclude='.github/workflows/' temp_default-settings/package/default-settings/ ${{ github.workspace }}/default-settings/
+        else
+            echo "Directory not found: temp_default-settings/package/default-settings"
+            exit 1
+        fi
         rm -rf temp_default-settings
+
 
     #- name: Clone r8125 repository
     #  run: |
